@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -34,9 +35,14 @@ public class ProjectController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProject(@PathVariable String id) {
-        final Optional<Project> optional = projectService.findByIdentifier(id);
+        final Optional<Project> optional = projectService.getProjectByIdentifier(id);
         if (optional.isPresent())
             return new ResponseEntity<>(optional.get(), HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping()
+    public List<Project> getProjects() {
+        return projectService.getProjects();
     }
 }
