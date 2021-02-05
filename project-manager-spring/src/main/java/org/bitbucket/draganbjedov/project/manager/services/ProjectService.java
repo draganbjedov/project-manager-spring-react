@@ -1,6 +1,7 @@
 package org.bitbucket.draganbjedov.project.manager.services;
 
 import org.bitbucket.draganbjedov.project.manager.domain.Project;
+import org.bitbucket.draganbjedov.project.manager.exceptions.ProjectIdentifierException;
 import org.bitbucket.draganbjedov.project.manager.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,11 @@ public class ProjectService {
     private ProjectRepository projectRepository;
 
     public void saveOrUpdate(Project project) {
-        projectRepository.save(project);
+        try {
+            project.setIdentifier(project.getIdentifier().toUpperCase());
+            projectRepository.save(project);
+        } catch (Exception ex) {
+            throw new ProjectIdentifierException("Project identifier '" + project.getIdentifier() + "' already exists");
+        }
     }
 }
