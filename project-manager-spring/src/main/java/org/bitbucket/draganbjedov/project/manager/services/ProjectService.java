@@ -6,6 +6,8 @@ import org.bitbucket.draganbjedov.project.manager.repositories.ProjectRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProjectService {
 
@@ -19,5 +21,9 @@ public class ProjectService {
         } catch (Exception ex) {
             throw new ProjectIdentifierException("Project identifier '" + project.getIdentifier() + "' already exists");
         }
+    }
+
+    public Optional<Project> findByIdentifier(String identifier) {
+        return Optional.ofNullable(projectRepository.findByIdentifier(identifier.toUpperCase()));
     }
 }
