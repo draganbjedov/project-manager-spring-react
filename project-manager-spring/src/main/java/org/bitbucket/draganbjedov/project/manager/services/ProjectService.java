@@ -31,4 +31,14 @@ public class ProjectService {
     public List<Project> getProjects() {
         return projectRepository.findAll();
     }
+
+    public boolean deleteProjectByIdentifier(String identifier) {
+        final Optional<Project> project = getProjectByIdentifier(identifier);
+        if (project.isPresent()) {
+            projectRepository.delete(project.get());
+            return true;
+        }
+        return false;
+    }
+
 }
