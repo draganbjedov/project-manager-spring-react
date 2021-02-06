@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/project")
@@ -35,10 +34,7 @@ public class ProjectController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProject(@PathVariable String id) {
-        final Optional<Project> optional = projectService.getProjectByIdentifier(id);
-        if (optional.isPresent())
-            return new ResponseEntity<>(optional.get(), HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(projectService.getProjectByIdentifier(id), HttpStatus.OK);
     }
 
     @GetMapping()
@@ -48,6 +44,7 @@ public class ProjectController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProject(@PathVariable String id) {
-        return new ResponseEntity<>(projectService.deleteProjectByIdentifier(id) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        projectService.deleteProjectByIdentifier(id);
+        return new ResponseEntity<>("Project is successfully deleted", HttpStatus.OK);
     }
 }

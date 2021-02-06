@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProjectService {
@@ -24,21 +23,25 @@ public class ProjectService {
         }
     }
 
-    public Optional<Project> getProjectByIdentifier(String identifier) {
-        return Optional.ofNullable(projectRepository.findByIdentifier(identifier.toUpperCase()));
+    public Project getProjectByIdentifier(String identifier) {
+        identifier = identifier.toUpperCase();
+        final Project project = projectRepository.findByIdentifier(identifier);
+        if (project == null)
+            throw new ProjectIdentifierException("Project with identifier '" + identifier + "' doesn't exists");
+        return project;
     }
 
     public List<Project> getProjects() {
         return projectRepository.findAll();
     }
 
-    public boolean deleteProjectByIdentifier(String identifier) {
-        final Optional<Project> project = getProjectByIdentifier(identifier);
-        if (project.isPresent()) {
-            projectRepository.delete(project.get());
-            return true;
+    public void deleteProjectByIdentifier(String identifier) {
+        identifier = identifier.toUpperCase();
+        final Project project = projectRepository.findByIdentifier(identifier);
+        if (project == null) {
+            throw new ProjectIdentifierException("Project with identifier '" + identifier + "' doesn't exists");
         }
-        return false;
+        projectRepository.delete(project);
     }
 
 }
