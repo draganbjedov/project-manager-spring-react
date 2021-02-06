@@ -1,6 +1,37 @@
 import React, { Component } from "react";
 
 class CreateEditProject extends Component {
+  constructor() {
+    super();
+    this.state = {
+      name: "",
+      identifier: "",
+      description: "",
+      startDate: "",
+      endDate: "",
+    };
+
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    const project = {
+      name: this.state.name,
+      identifier: this.state.identifier,
+      description: this.state.description,
+      startDate: this.state.startDate,
+      endDate: this.state.endDate,
+    };
+
+    console.log(project);
+  }
+
   render() {
     return (
       <div className="register">
@@ -9,12 +40,15 @@ class CreateEditProject extends Component {
             <div className="col-md-8 m-auto">
               <h5 className="display-4 text-center">Create Project form</h5>
               <hr />
-              <form>
+              <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <input
                     type="text"
                     className="form-control form-control-lg "
                     placeholder="Project Name"
+                    name="name"
+                    value={this.state.name}
+                    onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
@@ -22,12 +56,18 @@ class CreateEditProject extends Component {
                     type="text"
                     className="form-control form-control-lg"
                     placeholder="Unique Project ID"
+                    name="identifier"
+                    value={this.state.identifier}
+                    onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
                   <textarea
                     className="form-control form-control-lg"
                     placeholder="Project Description"
+                    name="description"
+                    value={this.state.description}
+                    onChange={this.onChange}
                   ></textarea>
                 </div>
                 <h6>Start Date</h6>
@@ -35,7 +75,9 @@ class CreateEditProject extends Component {
                   <input
                     type="date"
                     className="form-control form-control-lg"
-                    name="start_date"
+                    name="startDate"
+                    value={this.state.startDate}
+                    onChange={this.onChange}
                   />
                 </div>
                 <h6>Estimated End Date</h6>
@@ -43,7 +85,9 @@ class CreateEditProject extends Component {
                   <input
                     type="date"
                     className="form-control form-control-lg"
-                    name="end_date"
+                    name="endDate"
+                    value={this.state.endDate}
+                    onChange={this.onChange}
                   />
                 </div>
 
