@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/project")
+@CrossOrigin("http://localhost:3000")
 public class ProjectController {
 
     @Autowired
