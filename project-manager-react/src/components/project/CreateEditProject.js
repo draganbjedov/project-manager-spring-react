@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { PropTypes } from "prop-types";
 import { createProject } from "../../actions/ProjectActions";
 import { connect } from "react-redux";
+import classnames from "classnames";
 
 class CreateEditProject extends Component {
   constructor() {
@@ -12,10 +13,21 @@ class CreateEditProject extends Component {
       description: "",
       startDate: "",
       endDate: "",
+      errors: {},
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.errors) {
+      return {
+        errors: props.errors,
+      };
+    }
+    // Return null to indicate no change to state.
+    return null;
   }
 
   onChange(event) {
@@ -36,6 +48,7 @@ class CreateEditProject extends Component {
   }
 
   render() {
+    const { errors } = this.state;
     return (
       <div className="register">
         <div className="container">
@@ -47,31 +60,46 @@ class CreateEditProject extends Component {
                 <div className="form-group">
                   <input
                     type="text"
-                    className="form-control form-control-lg "
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.name,
+                    })}
                     placeholder="Project Name"
                     name="name"
                     value={this.state.name}
                     onChange={this.onChange}
                   />
+                  {errors.name && (
+                    <div className="invalid-feedback">{errors.name}</div>
+                  )}
                 </div>
                 <div className="form-group">
                   <input
                     type="text"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.identifier,
+                    })}
                     placeholder="Unique Project ID"
                     name="identifier"
                     value={this.state.identifier}
                     onChange={this.onChange}
                   />
+                  {errors.identifier && (
+                    <div className="invalid-feedback">{errors.identifier}</div>
+                  )}
                 </div>
                 <div className="form-group">
                   <textarea
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.description,
+                    })}
                     placeholder="Project Description"
                     name="description"
                     value={this.state.description}
                     onChange={this.onChange}
                   ></textarea>
+                  {errors.description && (
+                    <div className="invalid-feedback">{errors.description}</div>
+                  )}
                 </div>
                 <h6>Start Date</h6>
                 <div className="form-group">
@@ -109,6 +137,11 @@ class CreateEditProject extends Component {
 
 CreateEditProject.propTypes = {
   createProject: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
 };
 
-export default connect(null, { createProject })(CreateEditProject);
+const mapStateToProps = (state) => ({
+  errors: state.errors,
+});
+
+export default connect(mapStateToProps, { createProject })(CreateEditProject);
