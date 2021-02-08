@@ -20,14 +20,12 @@ class CreateProject extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.errors) {
-      return {
-        errors: props.errors,
-      };
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.errors != prevProps.errors) {
+      this.setState({
+        errors: this.props.errors,
+      });
     }
-    // Return null to indicate no change to state.
-    return null;
   }
 
   onChange(event) {
