@@ -1,7 +1,7 @@
 import "./App.css";
 import Header from "./components/layout/Header";
 import Dashboard from "./components/Dashboard";
-import CreateEditProject from "./components/project/CreateEditProject";
+import CreateProject from "./components/project/CreateProject";
 import store from "./store";
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -17,7 +17,7 @@ function App() {
         <div className="App">
           <Header />
           <Route path="/dashboard" component={Dashboard} />
-          <Route path="/create-project" component={CreateEditProject} />
+          <Route path="/create-project" component={CreateProject} />
         </div>
       </Router>
     </Provider>

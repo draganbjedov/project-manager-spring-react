@@ -4,7 +4,7 @@ import { createProject } from "../../actions/ProjectActions";
 import { connect } from "react-redux";
 import classnames from "classnames";
 
-class CreateEditProject extends Component {
+class CreateProject extends Component {
   constructor() {
     super();
     this.state = {
@@ -54,7 +54,7 @@ class CreateEditProject extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h5 className="display-4 text-center">Create Project form</h5>
+              <h5 className="display-4 text-center">Create Project</h5>
               <hr />
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
@@ -135,7 +135,7 @@ class CreateEditProject extends Component {
   }
 }
 
-CreateEditProject.propTypes = {
+CreateProject.propTypes = {
   createProject: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
 };
@@ -144,4 +144,4 @@ const mapStateToProps = (state) => ({
   errors: state.errors,
 });
 
-export default connect(mapStateToProps, { createProject })(CreateEditProject);
+export default connect(mapStateToProps, { createProject })(CreateProject);
