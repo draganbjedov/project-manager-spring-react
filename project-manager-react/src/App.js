@@ -2,6 +2,8 @@ import "./App.css";
 import Header from "./components/layout/Header";
 import Dashboard from "./components/Dashboard";
 import CreateProject from "./components/project/CreateProject";
+import UpdateProject from "./components/project/UpdateProject";
+
 import store from "./store";
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -18,6 +20,7 @@ function App() {
           <Header />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/create-project" component={CreateProject} />
+          <Route path="/update-project/:id" component={UpdateProject} />
         </div>
       </Router>
     </Provider>
