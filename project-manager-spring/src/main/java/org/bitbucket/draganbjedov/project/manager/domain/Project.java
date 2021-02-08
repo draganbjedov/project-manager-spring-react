@@ -41,7 +41,7 @@ public class Project {
     @JsonFormat(pattern = "yyyy-MM-DD")
     private Date endDate;
 
-    @Column
+    @Column(updatable = false)
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-DD")
