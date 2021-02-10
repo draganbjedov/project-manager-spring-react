@@ -77,12 +77,20 @@ public class TaskService {
 
     @Transactional
     public void updateTask(Task task, String projectIdentifier, String projectSequence) {
-        Task taskFromDB =  getTask(projectIdentifier, projectSequence);
+        Task taskFromDB = getTask(projectIdentifier, projectSequence);
         taskFromDB.setSummary(task.getSummary());
         taskFromDB.setAcceptanceCriteria(task.getAcceptanceCriteria());
         taskFromDB.setStatus(task.getStatus());
         taskFromDB.setPriority(task.getPriority());
 
         taskRepository.save(taskFromDB);
+    }
+
+    @Transactional
+    public void deleteTask(String projectIdentifier, String projectSequence) {
+        Task taskFromDB = getTask(projectIdentifier, projectSequence);
+        // Remove relation with backlog
+//        taskFromDB.getBacklog().getTasks().remove(taskFromDB);
+        taskRepository.delete(taskFromDB);
     }
 }
