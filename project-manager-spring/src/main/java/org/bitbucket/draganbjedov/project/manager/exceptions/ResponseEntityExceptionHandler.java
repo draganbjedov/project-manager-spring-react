@@ -13,4 +13,10 @@ public class ResponseEntityExceptionHandler extends org.springframework.web.serv
         ProjectIdentifierExceptionResponse exResponse = new ProjectIdentifierExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(exResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public final ResponseEntity<TaskNotFoundExceptionResponse> handleProjectIdentifierException(TaskNotFoundException ex) {
+        TaskNotFoundExceptionResponse exResponse = new TaskNotFoundExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(exResponse, HttpStatus.NOT_FOUND);
+    }
 }

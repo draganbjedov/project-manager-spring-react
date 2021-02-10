@@ -37,4 +37,9 @@ public class BacklogController {
     public List<Task> getTasksForProject(@PathVariable("id") String projectIdentifier) {
         return taskService.getTasks(projectIdentifier);
     }
+
+    @GetMapping("/{project_id}/{task_id}")
+    public Task getTask(@PathVariable("project_id") String projectIdentifier, @PathVariable("task_id") String projectSequence) {
+        return taskService.getTask(projectIdentifier, projectSequence);
+    }
 }

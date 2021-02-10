@@ -3,7 +3,9 @@ package org.bitbucket.draganbjedov.project.manager.services;
 import org.bitbucket.draganbjedov.project.manager.domain.Backlog;
 import org.bitbucket.draganbjedov.project.manager.domain.Task;
 import org.bitbucket.draganbjedov.project.manager.exceptions.ProjectIdentifierException;
+import org.bitbucket.draganbjedov.project.manager.exceptions.TaskNotFoundException;
 import org.bitbucket.draganbjedov.project.manager.repositories.BacklogRepository;
+import org.bitbucket.draganbjedov.project.manager.repositories.ProjectRepository;
 import org.bitbucket.draganbjedov.project.manager.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Autowired
+    private ProjectRepository projectRepository;
+
     @Transactional
     public void addTask(Task task) {
         task.setProjectIdentifier(task.getProjectIdentifier().toUpperCase(Locale.ROOT));
@@ -34,9 +39,9 @@ public class TaskService {
         task.setProjectSequence(task.getProjectIdentifier() + "-" + taskSequence++);
         backlog.setTaskSequence(taskSequence);
 
-        if(task.getPriority() == null || task.getPriority() == 0)
+        if (task.getPriority() == null || task.getPriority() == 0)
             task.setPriority(3);
-        if(task.getStatus() == null || task.getStatus().isBlank())
+        if (task.getStatus() == null || task.getStatus().isBlank())
             task.setStatus("TO_DO");
 
         backlog.addTask(task);
@@ -53,5 +58,20 @@ public class TaskService {
             throw new ProjectIdentifierException("Project with identifier '" + projectIdentifier + "' doesn't exists");
 
         return backlog.getTasks();
+    }
+
+    @Transactional
+    public Task getTask(String projectIdentifier, String projectSequence) {
+        projectIdentifier = projectIdentifier.toUpperCase();
+        if (projectRepository.findByIdentifier(projectIdentifier) == null)
+            throw new ProjectIdentifierException("Project with identifier '" + projectIdentifier + "' doesn't exists");
+
+        projectSequence = projectSequence.toUpperCase();
+        final Task task = taskRepository.findByProjectSequence(projectSequence);
+        if (task == null)
+            throw new TaskNotFoundException(projectSequence);
+        if (!task.getProjectIdentifier().equals(projectIdentifier))
+            throw new TaskNotFoundException(projectIdentifier, projectSequence);
+        return task;
     }
 }

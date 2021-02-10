@@ -30,7 +30,7 @@ public class Task {
     @Column
     private Integer priority;
 
-    @Column(name = "project_sequence", updatable = false)
+    @Column(name = "project_sequence", updatable = false, unique = true)
     private String projectSequence;
 
     @Column(name = "project_identifier", updatable = false)
