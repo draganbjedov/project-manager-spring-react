@@ -3,6 +3,7 @@ import Header from "./components/layout/Header";
 import Dashboard from "./components/Dashboard";
 import CreateProject from "./components/project/CreateProject";
 import UpdateProject from "./components/project/UpdateProject";
+import ProjectBoard from "./components/project_board/ProjectBoard";
 
 import store from "./store";
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/create-project" component={CreateProject} />
           <Route path="/update-project/:id" component={UpdateProject} />
+          <Route path="/board/:id" component={ProjectBoard} />
         </div>
       </Router>
     </Provider>
