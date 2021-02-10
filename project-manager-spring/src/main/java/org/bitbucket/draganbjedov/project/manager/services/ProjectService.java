@@ -7,6 +7,7 @@ import org.bitbucket.draganbjedov.project.manager.repositories.BacklogRepository
 import org.bitbucket.draganbjedov.project.manager.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class ProjectService {
     @Autowired
     private BacklogRepository backlogRepository;
 
+    @Transactional
     public void saveOrUpdate(Project project) {
         try {
             final String identifier = project.getIdentifier().toUpperCase();
@@ -41,6 +43,7 @@ public class ProjectService {
         }
     }
 
+    @Transactional
     public Project getProjectByIdentifier(String identifier) {
         identifier = identifier.toUpperCase();
         final Project project = projectRepository.findByIdentifier(identifier);
@@ -49,10 +52,12 @@ public class ProjectService {
         return project;
     }
 
+    @Transactional
     public List<Project> getProjects() {
         return projectRepository.findAll();
     }
 
+    @Transactional
     public void deleteProjectByIdentifier(String identifier) {
         identifier = identifier.toUpperCase();
         final Project project = projectRepository.findByIdentifier(identifier);

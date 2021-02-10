@@ -7,6 +7,7 @@ import org.bitbucket.draganbjedov.project.manager.repositories.BacklogRepository
 import org.bitbucket.draganbjedov.project.manager.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
@@ -20,6 +21,7 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Transactional
     public void addTask(Task task) {
         task.setProjectIdentifier(task.getProjectIdentifier().toUpperCase(Locale.ROOT));
 
@@ -42,6 +44,7 @@ public class TaskService {
         taskRepository.save(task);
     }
 
+    @Transactional
     public List<Task> getTasks(String projectIdentifier) {
         projectIdentifier = projectIdentifier.toUpperCase();
 
