@@ -8,6 +8,7 @@ import org.bitbucket.draganbjedov.project.manager.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -39,5 +40,15 @@ public class TaskService {
         backlog.addTask(task);
 
         taskRepository.save(task);
+    }
+
+    public List<Task> getTasks(String projectIdentifier) {
+        projectIdentifier = projectIdentifier.toUpperCase();
+
+        Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+        if (backlog == null)
+            throw new ProjectIdentifierException("Project with identifier '" + projectIdentifier + "' doesn't exists");
+
+        return backlog.getTasks();
     }
 }

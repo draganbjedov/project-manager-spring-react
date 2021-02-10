@@ -1,6 +1,7 @@
 package org.bitbucket.draganbjedov.project.manager.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -36,6 +37,7 @@ public class Project {
             cascade = CascadeType.ALL,
             mappedBy = "project"
     )
+    @JsonIgnore
     private Backlog backlog;
 
     @Column(name = "start_date")

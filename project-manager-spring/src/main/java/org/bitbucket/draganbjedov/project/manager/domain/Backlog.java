@@ -30,7 +30,7 @@ public class Backlog {
             cascade = CascadeType.ALL,
             mappedBy = "backlog"
     )
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     public void addTask(Task task) {
         if (tasks == null)
