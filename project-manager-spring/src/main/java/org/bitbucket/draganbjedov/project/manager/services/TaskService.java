@@ -74,4 +74,15 @@ public class TaskService {
             throw new TaskNotFoundException(projectIdentifier, projectSequence);
         return task;
     }
+
+    @Transactional
+    public void updateTask(Task task, String projectIdentifier, String projectSequence) {
+        Task taskFromDB =  getTask(projectIdentifier, projectSequence);
+        taskFromDB.setSummary(task.getSummary());
+        taskFromDB.setAcceptanceCriteria(task.getAcceptanceCriteria());
+        taskFromDB.setStatus(task.getStatus());
+        taskFromDB.setPriority(task.getPriority());
+
+        taskRepository.save(taskFromDB);
+    }
 }

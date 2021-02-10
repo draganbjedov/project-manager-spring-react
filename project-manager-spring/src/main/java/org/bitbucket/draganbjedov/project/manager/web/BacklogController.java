@@ -42,4 +42,16 @@ public class BacklogController {
     public Task getTask(@PathVariable("project_id") String projectIdentifier, @PathVariable("task_id") String projectSequence) {
         return taskService.getTask(projectIdentifier, projectSequence);
     }
+
+    @PatchMapping("/{project_id}/{task_id}")
+    public ResponseEntity<?> updateTask(@Valid @RequestBody Task task, BindingResult bindingResult,
+                                        @PathVariable("project_id") String projectIdentifier,
+                                        @PathVariable("task_id") String projectSequence) {
+        final var error = validationService.checkForErrors(bindingResult);
+        if (error.isPresent())
+            return error.get();
+
+        taskService.updateTask(task, projectIdentifier, projectSequence);
+        return new ResponseEntity<>(task, HttpStatus.OK);
+    }
 }
