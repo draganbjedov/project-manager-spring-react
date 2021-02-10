@@ -16,7 +16,7 @@ public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column
     @NotBlank(message = "Project name cannot be blank")
@@ -31,23 +31,30 @@ public class Project {
     @NotBlank(message = "Project description cannot be blank")
     private String description;
 
-    @Column
+    @OneToOne(
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            mappedBy = "project"
+    )
+    private Backlog backlog;
+
+    @Column(name = "start_date")
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-DD")
     private Date startDate;
 
-    @Column
+    @Column(name = "end_date")
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-DD")
     private Date endDate;
 
-    @Column(updatable = false)
+    @Column(name = "created_date", updatable = false)
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-DD")
     private Date createdDate;
 
-    @Column
+    @Column(name = "updated_date")
     @UpdateTimestamp
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-DD")
