@@ -154,7 +154,7 @@ class UpdateProject extends Component {
 UpdateProject.propTypes = {
   createProject: PropTypes.func.isRequired,
   getProject: PropTypes.func.isRequired,
-  // errors: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
 };
 
@@ -165,6 +165,4 @@ const mapStateToProps = (state) => ({
 });
 
 // export default connect(mapStateToProps, { createProject })(UpdateProject);
-export default connect(mapStateToProps, { getProject, createProject })(
-  UpdateProject
-);
+export default connect(mapStateToProps, { getProject, createProject })(UpdateProject);
