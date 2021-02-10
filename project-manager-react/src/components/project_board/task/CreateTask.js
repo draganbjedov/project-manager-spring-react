@@ -1,36 +1,120 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { PropTypes } from "prop-types";
+import { createTask } from "../../../actions/TaskActions";
+import { getProject } from "../../../actions/ProjectActions";
+import { connect } from "react-redux";
+import classnames from "classnames";
 
 class CreateTask extends Component {
+  constructor(props) {
+    super(props);
+
+    const { id } = this.props.match.params;
+
+    this.state = {
+      summary: "",
+      acceptanceCriteria: "",
+      dueDate: "",
+      priority: 0,
+      status: "",
+      projectIdentifier: id,
+      projectName: "",
+      errors: {},
+    };
+
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    const task = {
+      summary: this.state.summary,
+      acceptanceCriteria: this.state.acceptanceCriteria,
+      dueDate: this.state.dueDate,
+      priority: this.state.priority,
+      status: this.state.status,
+      projectIdentifier: this.state.projectIdentifier,
+    };
+
+    this.props.createTask(task, this.props.history);
+  }
+
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    this.props.getProject(id, this.props.history);
+  }
+
+  componentDidUpdate(prevProps, _prevState) {
+    if (this.props.project !== prevProps.project) {
+      const { name } = this.props.project;
+      this.setState({ projectName: name });
+    }
+    if (this.props.errors != prevProps.errors) {
+      this.setState({
+        errors: this.props.errors,
+      });
+    }
+  }
+
   render() {
     const { id } = this.props.match.params;
+    const { errors } = this.state;
     return (
-      <div class="add-PBI">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8 m-auto">
-              <Link to={`/board/${id}`} class="btn btn-light">
+      <div className="add-PBI">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <Link to={`/board/${id}`} className="btn btn-light">
                 Back to Project Board
               </Link>
-              <h4 class="display-4 text-center">Create Project Task</h4>
-              <p class="lead text-center">Project Name + Project Code</p>
+              <h4 className="display-4 text-center">Create Project Task</h4>
+              <p className="lead text-center">{this.state.projectName} | {this.state.projectIdentifier}</p>
               <form onSubmit={this.onSubmit}>
-                <div class="form-group">
-                  <input type="text" class="form-control form-control-lg" name="summary" placeholder="Project Task summary" />
+                <div className="form-group">
+                  <input
+                    type="text"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.summary,
+                    })}
+                    name="summary"
+                    placeholder="Project Task summary"
+                    value={this.state.summary}
+                    onChange={this.onChange}
+                  />
+                  {errors.summary && <div className="invalid-feedback">{errors.summary}</div>}
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <textarea
-                    class="form-control form-control-lg"
+                    className="form-control form-control-lg"
                     placeholder="Acceptance Criteria"
                     name="acceptanceCriteria"
+                    value={this.state.acceptanceCriteria}
+                    onChange={this.onChange}
                   ></textarea>
                 </div>
                 <h6>Due Date</h6>
-                <div class="form-group">
-                  <input type="date" class="form-control form-control-lg" name="dueDate" />
+                <div className="form-group">
+                  <input
+                    type="date"
+                    className="form-control form-control-lg"
+                    name="dueDate"
+                    value={this.state.dueDate}
+                    onChange={this.onChange}
+                  />
                 </div>
-                <div class="form-group">
-                  <select class="form-control form-control-lg" name="priority">
+                <div className="form-group">
+                  <select
+                    className="form-control form-control-lg"
+                    name="priority"
+                    value={this.state.priority}
+                    onChange={this.onChange}
+                  >
                     <option value={0}>Select Priority</option>
                     <option value={1}>High</option>
                     <option value={2}>Medium</option>
@@ -38,8 +122,13 @@ class CreateTask extends Component {
                   </select>
                 </div>
 
-                <div class="form-group">
-                  <select class="form-control form-control-lg" name="status">
+                <div className="form-group">
+                  <select
+                    className="form-control form-control-lg"
+                    name="status"
+                    value={this.state.status}
+                    onChange={this.onChange}
+                  >
                     <option value="">Select Status</option>
                     <option value="TO_DO">TO DO</option>
                     <option value="IN_PROGRESS">IN PROGRESS</option>
@@ -47,7 +136,7 @@ class CreateTask extends Component {
                   </select>
                 </div>
 
-                <input type="submit" class="btn btn-primary btn-block mt-4" />
+                <input type="submit" className="btn btn-primary btn-block mt-4" />
               </form>
             </div>
           </div>
@@ -57,4 +146,16 @@ class CreateTask extends Component {
   }
 }
 
-export default CreateTask;
+CreateTask.propTypes = {
+  createTask: PropTypes.func.isRequired,
+  getProject: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  errors: state.errors,
+  // state.project = because from src/reducers/index.js 'project' is name of reducer object
+  project: state.project.project,
+});
+
+export default connect(mapStateToProps, { createTask, getProject })(CreateTask);

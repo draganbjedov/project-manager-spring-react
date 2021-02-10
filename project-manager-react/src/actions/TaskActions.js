@@ -21,7 +21,7 @@ export const createTask = (task, history) => async (dispatch) => {
 export const getTasks = (projectIdentifier) => async (dispatch) => {
   const response = await axios.get(`/api/backlog/${projectIdentifier}`);
   dispatch({
-    type: GET_PROJECTS,
+    type: GET_TASKS,
     payload: response.data,
   });
 };
@@ -30,7 +30,7 @@ export const getTask = (projectIdentifier, projectSequence, history) => async (d
   try {
     const response = await axios.get(`/api/backlog/${projectIdentifier}/${projectSequence}`);
     dispatch({
-      type: GET_PROJECT,
+      type: GET_TASK,
       payload: response.data,
     });
   } catch (error) {
@@ -42,7 +42,7 @@ export const deleteTask = (projectIdentifier, projectSequence) => async (dispatc
   if (window.confirm("Are sure that you want delete task?")) {
     await axios.delete(`/api/backlog/${projectIdentifier}/${projectSequence}`);
     dispatch({
-      type: DELETE_PROJECT,
+      type: DELETE_TASK,
       payload: projectSequence,
     });
   }
