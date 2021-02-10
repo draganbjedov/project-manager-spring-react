@@ -4,6 +4,7 @@ import Dashboard from "./components/Dashboard";
 import CreateProject from "./components/project/CreateProject";
 import UpdateProject from "./components/project/UpdateProject";
 import ProjectBoard from "./components/project_board/ProjectBoard";
+import CreateTask from "./components/project_board/task/CreateTask";
 
 import store from "./store";
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/create-project" component={CreateProject} />
           <Route path="/update-project/:id" component={UpdateProject} />
           <Route path="/board/:id" component={ProjectBoard} />
+          <Route path="/create-task/:id" component={CreateTask} />
         </div>
       </Router>
     </Provider>
