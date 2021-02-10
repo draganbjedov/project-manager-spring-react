@@ -15,7 +15,7 @@ public class Backlog {
     private long id;
 
     @Column(name = "task_sequence")
-    private int taskSequence = 0;
+    private int taskSequence = 1;
 
     @Column(name = "project_identifier")
     private String projectIdentifier;

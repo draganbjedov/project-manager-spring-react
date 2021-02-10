@@ -28,12 +28,13 @@ public class Task {
     private String status;
 
     @Column
-    private String priority;
+    private Integer priority;
 
     @Column(name = "project_sequence", updatable = false)
     private String projectSequence;
 
     @Column(name = "project_identifier", updatable = false)
+    @NotBlank(message = "Project identifier cannot be blank")
     private String projectIdentifier;
 
     @ManyToOne(
