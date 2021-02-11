@@ -44,19 +44,19 @@ public class Task {
 
     @Column(name = "due_date")
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "yyyy-MM-DD")
+    @JsonFormat(pattern = "yyyy-MM-DD", timezone = "Europe/Berlin")
     private Date dueDate;
 
     @Column(name = "created_date", updatable = false)
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "yyyy-MM-DD")
+    @JsonFormat(pattern = "yyyy-MM-DD", timezone = "Europe/Berlin")
     private Date createdDate;
 
     @Column(name = "updated_date")
     @UpdateTimestamp
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "yyyy-MM-DD")
+    @JsonFormat(pattern = "yyyy-MM-DD", timezone = "Europe/Berlin")
     private Date updatedDate;
 
 }
