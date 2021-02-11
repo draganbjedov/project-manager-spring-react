@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
+import { deleteTask } from "../../../actions/TaskActions";
 
 class Task extends Component {
+
+  onDelete = (proj_id, task_id) => {
+    this.props.deleteTask(proj_id, task_id);
+  };
+
   render() {
     const { task } = this.props;
     let priorityString;
@@ -32,11 +40,15 @@ class Task extends Component {
             View / Update
           </Link>
 
-          <button className="btn btn-danger ml-4">Delete</button>
+          <button className="btn btn-danger ml-4" onClick={this.onDelete.bind(this, task.projectIdentifier, task.projectSequence)}>Delete</button>
         </div>
       </div>
     );
   }
 }
 
-export default Task;
+Task.propTypes = {
+  deleteTask: PropTypes.func.isRequired,
+};
+
+export default connect(null, { deleteTask })(Task);
