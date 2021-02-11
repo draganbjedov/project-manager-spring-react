@@ -19,11 +19,18 @@ export const createTask = (task, history) => async (dispatch) => {
 };
 
 export const getTasks = (projectIdentifier) => async (dispatch) => {
-  const response = await axios.get(`/api/backlog/${projectIdentifier}`);
-  dispatch({
-    type: GET_TASKS,
-    payload: response.data,
-  });
+  try {
+    const response = await axios.get(`/api/backlog/${projectIdentifier}`);
+    dispatch({
+      type: GET_TASKS,
+      payload: response.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data,
+    });
+  }
 };
 
 export const getTask = (projectIdentifier, projectSequence, history) => async (dispatch) => {
