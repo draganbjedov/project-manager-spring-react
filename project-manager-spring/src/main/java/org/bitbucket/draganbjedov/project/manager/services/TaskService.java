@@ -80,6 +80,7 @@ public class TaskService {
         Task taskFromDB = getTask(projectIdentifier, projectSequence);
         taskFromDB.setSummary(task.getSummary());
         taskFromDB.setAcceptanceCriteria(task.getAcceptanceCriteria());
+        taskFromDB.setDueDate(task.getDueDate());
         taskFromDB.setStatus(task.getStatus());
         taskFromDB.setPriority(task.getPriority());
 
