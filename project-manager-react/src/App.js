@@ -5,6 +5,7 @@ import CreateProject from "./components/project/CreateProject";
 import UpdateProject from "./components/project/UpdateProject";
 import ProjectBoard from "./components/project_board/ProjectBoard";
 import CreateTask from "./components/project_board/task/CreateTask";
+import UpdateTask from "./components/project_board/task/UpdateTask";
 
 import store from "./store";
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/update-project/:id" component={UpdateProject} />
           <Route path="/board/:id" component={ProjectBoard} />
           <Route path="/create-task/:id" component={CreateTask} />
+          <Route path="/update-task/:proj_id/:task_id" component={UpdateTask} />
         </div>
       </Router>
     </Provider>

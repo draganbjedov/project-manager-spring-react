@@ -18,6 +18,23 @@ export const createTask = (task, history) => async (dispatch) => {
   }
 };
 
+export const updateTask = (task, history) => async (dispatch) => {
+  try {
+    await axios.patch(`/api/backlog/${task.projectIdentifier}/${task.projectSequence}`, task);
+    history.push(`/board/${task.projectIdentifier}`);
+    // Clear errors
+    dispatch({
+      type: GET_ERRORS,
+      payload: {},
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data,
+    });
+  }
+};
+
 export const getTasks = (projectIdentifier) => async (dispatch) => {
   try {
     const response = await axios.get(`/api/backlog/${projectIdentifier}`);
