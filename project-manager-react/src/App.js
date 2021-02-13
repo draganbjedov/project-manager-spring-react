@@ -7,6 +7,8 @@ import ProjectBoard from "./components/project_board/ProjectBoard";
 import CreateTask from "./components/project_board/task/CreateTask";
 import UpdateTask from "./components/project_board/task/UpdateTask";
 import Landing from "./components/layout/Landing";
+import Register from "./components/users/Register";
+import Login from "./components/users/Login";
 
 import store from "./store";
 
@@ -22,15 +24,21 @@ function App() {
       <Router>
         <div className="App">
           <Header />
-
-          <Route path="/" component={Landing} />
-
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/create-project" component={CreateProject} />
-          <Route path="/update-project/:id" component={UpdateProject} />
-          <Route path="/board/:id" component={ProjectBoard} />
-          <Route path="/create-task/:id" component={CreateTask} />
-          <Route path="/update-task/:proj_id/:task_id" component={UpdateTask} />
+          {
+            //Public Routes
+          }
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/login" component={Login} />
+          {
+            //Private Routes
+          }
+          <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/create-project" component={CreateProject} />
+          <Route exact path="/update-project/:id" component={UpdateProject} />
+          <Route exact path="/board/:id" component={ProjectBoard} />
+          <Route exact path="/create-task/:id" component={CreateTask} />
+          <Route exact path="/update-task/:proj_id/:task_id" component={UpdateTask} />
         </div>
       </Router>
     </Provider>
