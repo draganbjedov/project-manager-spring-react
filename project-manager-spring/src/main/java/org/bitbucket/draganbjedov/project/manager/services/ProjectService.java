@@ -2,14 +2,18 @@ package org.bitbucket.draganbjedov.project.manager.services;
 
 import org.bitbucket.draganbjedov.project.manager.domain.Backlog;
 import org.bitbucket.draganbjedov.project.manager.domain.Project;
+import org.bitbucket.draganbjedov.project.manager.domain.User;
 import org.bitbucket.draganbjedov.project.manager.exceptions.ProjectIdentifierException;
 import org.bitbucket.draganbjedov.project.manager.repositories.BacklogRepository;
 import org.bitbucket.draganbjedov.project.manager.repositories.ProjectRepository;
+import org.bitbucket.draganbjedov.project.manager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjectService {
@@ -20,9 +24,17 @@ public class ProjectService {
     @Autowired
     private BacklogRepository backlogRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Transactional
-    public void saveOrUpdate(Project project) {
+    public void saveOrUpdate(Project project, String username) {
         try {
+            Optional<User> optionalUser = userRepository.findByUsername(username);
+            if (optionalUser.isEmpty())
+                throw new UsernameNotFoundException("User with username '" + username + "' doesn't exists");
+            project.setUser(optionalUser.get());
+
             final String identifier = project.getIdentifier().toUpperCase();
             project.setIdentifier(identifier);
 

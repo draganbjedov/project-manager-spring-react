@@ -11,8 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -39,7 +41,13 @@ public class User implements UserDetails {
     @Column
     private String fullName;
 
-    //TODO One to many with project
+    @OneToMany(
+            cascade = CascadeType.REFRESH,
+            fetch = FetchType.EAGER,
+            mappedBy = "user",
+            orphanRemoval = true
+    )
+    private List<Project> projects;
 
     @Column(name = "created_date", updatable = false)
     @CreationTimestamp
@@ -52,6 +60,13 @@ public class User implements UserDetails {
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-DD", timezone = "Europe/Berlin")
     private Date updatedDate;
+
+    public void addProject(Project project) {
+        if (projects == null)
+            projects = new ArrayList<>();
+        project.setUser(this);
+        projects.add(project);
+    }
 
     @Override
     @JsonIgnore
