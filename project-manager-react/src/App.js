@@ -6,6 +6,7 @@ import UpdateProject from "./components/project/UpdateProject";
 import ProjectBoard from "./components/project_board/ProjectBoard";
 import CreateTask from "./components/project_board/task/CreateTask";
 import UpdateTask from "./components/project_board/task/UpdateTask";
+import Landing from "./components/layout/Landing";
 
 import store from "./store";
 
@@ -21,6 +22,9 @@ function App() {
       <Router>
         <div className="App">
           <Header />
+
+          <Route path="/" component={Landing} />
+
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/create-project" component={CreateProject} />
           <Route path="/update-project/:id" component={UpdateProject} />
