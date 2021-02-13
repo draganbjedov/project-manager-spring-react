@@ -56,11 +56,18 @@ public class ProjectService {
     }
 
     @Transactional
-    public Project getProjectByIdentifier(String identifier) {
+    public Project getProjectByIdentifier(String identifier, String username) {
         identifier = identifier.toUpperCase();
-        final Project project = projectRepository.findByIdentifier(identifier);
-        if (project == null)
+
+        final Optional<Project> optionalProject = projectRepository.findByIdentifier(identifier);
+        if (optionalProject.isEmpty())
             throw new ProjectIdentifierException("Project with identifier '" + identifier + "' doesn't exists");
+
+        final Project project = optionalProject.get();
+        if (!project.getUser().getUsername().equals(username))
+            throw new ProjectIdentifierException("Project with identifier '" + identifier
+                    + "' doesn't exists for user '" + username + "'");
+
         return project;
     }
 
@@ -73,13 +80,8 @@ public class ProjectService {
     }
 
     @Transactional
-    public void deleteProjectByIdentifier(String identifier) {
-        identifier = identifier.toUpperCase();
-        final Project project = projectRepository.findByIdentifier(identifier);
-        if (project == null) {
-            throw new ProjectIdentifierException("Project with identifier '" + identifier + "' doesn't exists");
-        }
-        projectRepository.delete(project);
+    public void deleteProjectByIdentifier(String identifier, String username) {
+        projectRepository.delete(getProjectByIdentifier(identifier, username));
     }
 
 }

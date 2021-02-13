@@ -1,18 +1,16 @@
 package org.bitbucket.draganbjedov.project.manager.services;
 
 import org.bitbucket.draganbjedov.project.manager.domain.Backlog;
+import org.bitbucket.draganbjedov.project.manager.domain.Project;
 import org.bitbucket.draganbjedov.project.manager.domain.Task;
-import org.bitbucket.draganbjedov.project.manager.exceptions.ProjectIdentifierException;
 import org.bitbucket.draganbjedov.project.manager.exceptions.TaskNotFoundException;
 import org.bitbucket.draganbjedov.project.manager.repositories.BacklogRepository;
-import org.bitbucket.draganbjedov.project.manager.repositories.ProjectRepository;
 import org.bitbucket.draganbjedov.project.manager.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class TaskService {
@@ -24,16 +22,13 @@ public class TaskService {
     private TaskRepository taskRepository;
 
     @Autowired
-    private ProjectRepository projectRepository;
+    private ProjectService projectService;
 
     @Transactional
-    public void addTask(Task task) {
-        task.setProjectIdentifier(task.getProjectIdentifier().toUpperCase(Locale.ROOT));
+    public void addTask(Task task, String username) {
+        task.setProjectIdentifier(task.getProjectIdentifier().toUpperCase());
 
-        Backlog backlog = backlogRepository.findByProjectIdentifier(task.getProjectIdentifier());
-
-        if (backlog == null)
-            throw new ProjectIdentifierException("Project with identifier '" + task.getProjectIdentifier() + "' doesn't exists");
+        Backlog backlog = projectService.getProjectByIdentifier(task.getProjectIdentifier(), username).getBacklog();
 
         int taskSequence = backlog.getTaskSequence();
         task.setProjectSequence(task.getProjectIdentifier() + "-" + taskSequence++);
@@ -50,21 +45,15 @@ public class TaskService {
     }
 
     @Transactional
-    public List<Task> getTasks(String projectIdentifier) {
-        projectIdentifier = projectIdentifier.toUpperCase();
-
-        Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
-        if (backlog == null)
-            throw new ProjectIdentifierException("Project with identifier '" + projectIdentifier + "' doesn't exists");
-
-        return backlog.getTasks();
+    public List<Task> getTasks(String projectIdentifier, String username) {
+        final Project project = projectService.getProjectByIdentifier(projectIdentifier, username);
+        return project.getBacklog().getTasks();
     }
 
     @Transactional
-    public Task getTask(String projectIdentifier, String projectSequence) {
+    public Task getTask(String projectIdentifier, String projectSequence, String username) {
         projectIdentifier = projectIdentifier.toUpperCase();
-        if (projectRepository.findByIdentifier(projectIdentifier) == null)
-            throw new ProjectIdentifierException("Project with identifier '" + projectIdentifier + "' doesn't exists");
+        projectService.getProjectByIdentifier(projectIdentifier, username);
 
         projectSequence = projectSequence.toUpperCase();
         final Task task = taskRepository.findByProjectSequence(projectSequence);
@@ -76,8 +65,8 @@ public class TaskService {
     }
 
     @Transactional
-    public void updateTask(Task task, String projectIdentifier, String projectSequence) {
-        Task taskFromDB = getTask(projectIdentifier, projectSequence);
+    public void updateTask(Task task, String projectIdentifier, String projectSequence, String username) {
+        Task taskFromDB = getTask(projectIdentifier, projectSequence, username);
         taskFromDB.setSummary(task.getSummary());
         taskFromDB.setAcceptanceCriteria(task.getAcceptanceCriteria());
         taskFromDB.setDueDate(task.getDueDate());
@@ -88,10 +77,8 @@ public class TaskService {
     }
 
     @Transactional
-    public void deleteTask(String projectIdentifier, String projectSequence) {
-        Task taskFromDB = getTask(projectIdentifier, projectSequence);
-        // Remove relation with backlog
-//        taskFromDB.getBacklog().getTasks().remove(taskFromDB);
+    public void deleteTask(String projectIdentifier, String projectSequence, String username) {
+        Task taskFromDB = getTask(projectIdentifier, projectSequence, username);
         taskRepository.delete(taskFromDB);
     }
 }

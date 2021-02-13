@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -24,40 +25,45 @@ public class BacklogController {
     private ValidationService validationService;
 
     @PostMapping
-    public ResponseEntity<?> createNewTask(@Valid @RequestBody Task task, BindingResult bindingResult) {
+    public ResponseEntity<?> createNewTask(@Valid @RequestBody Task task, BindingResult bindingResult, Principal principal) {
         final var error = validationService.checkForErrors(bindingResult);
         if (error.isPresent())
             return error.get();
 
-        taskService.addTask(task);
+        taskService.addTask(task, principal.getName());
         return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public List<Task> getTasksForProject(@PathVariable("id") String projectIdentifier) {
-        return taskService.getTasks(projectIdentifier);
+    public List<Task> getTasksForProject(@PathVariable("id") String projectIdentifier, Principal principal) {
+        return taskService.getTasks(projectIdentifier, principal.getName());
     }
 
     @GetMapping("/{project_id}/{task_id}")
-    public Task getTask(@PathVariable("project_id") String projectIdentifier, @PathVariable("task_id") String projectSequence) {
-        return taskService.getTask(projectIdentifier, projectSequence);
+    public Task getTask(@PathVariable("project_id") String projectIdentifier,
+                        @PathVariable("task_id") String projectSequence,
+                        Principal principal) {
+        return taskService.getTask(projectIdentifier, projectSequence, principal.getName());
     }
 
     @PatchMapping("/{project_id}/{task_id}")
     public ResponseEntity<?> updateTask(@Valid @RequestBody Task task, BindingResult bindingResult,
                                         @PathVariable("project_id") String projectIdentifier,
-                                        @PathVariable("task_id") String projectSequence) {
+                                        @PathVariable("task_id") String projectSequence,
+                                        Principal principal) {
         final var error = validationService.checkForErrors(bindingResult);
         if (error.isPresent())
             return error.get();
 
-        taskService.updateTask(task, projectIdentifier, projectSequence);
+        taskService.updateTask(task, projectIdentifier, projectSequence, principal.getName());
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
     @DeleteMapping("/{project_id}/{task_id}")
-    public ResponseEntity<?> deleteTask(@PathVariable("project_id") String projectIdentifier, @PathVariable("task_id") String projectSequence) {
-        taskService.deleteTask(projectIdentifier, projectSequence);
+    public ResponseEntity<?> deleteTask(@PathVariable("project_id") String projectIdentifier,
+                                        @PathVariable("task_id") String projectSequence,
+                                        Principal principal) {
+        taskService.deleteTask(projectIdentifier, projectSequence, principal.getName());
         return new ResponseEntity<>("Task is successfully deleted", HttpStatus.OK);
     }
 }

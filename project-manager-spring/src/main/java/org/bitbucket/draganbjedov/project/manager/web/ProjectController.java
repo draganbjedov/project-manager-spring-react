@@ -36,8 +36,8 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProject(@PathVariable String id) {
-        return new ResponseEntity<>(projectService.getProjectByIdentifier(id), HttpStatus.OK);
+    public ResponseEntity<?> getProject(@PathVariable String id, Principal principal) {
+        return new ResponseEntity<>(projectService.getProjectByIdentifier(id, principal.getName()), HttpStatus.OK);
     }
 
     @GetMapping
@@ -46,8 +46,8 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProject(@PathVariable String id) {
-        projectService.deleteProjectByIdentifier(id);
+    public ResponseEntity<?> deleteProject(@PathVariable String id, Principal principal) {
+        projectService.deleteProjectByIdentifier(id, principal.getName());
         return new ResponseEntity<>("Project is successfully deleted", HttpStatus.OK);
     }
 }
