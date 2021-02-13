@@ -1,5 +1,6 @@
 package org.bitbucket.draganbjedov.project.manager.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.bitbucket.draganbjedov.project.manager.domain.User;
@@ -11,13 +12,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.bitbucket.draganbjedov.project.manager.security.SecurityConstants.TOKEN_EXPIRATION_TIME;
-
 @Component
 public class JwtTokenProvider {
 
     private static final String SECRET = "PM_SECRET_KEY_FOR_JWT";
-    private static final String PREFIX = "Bearer ";
+    public static final String PREFIX = "Bearer ";
+    private static final long EXPIRATION_TIME = 30_000; // 30 seconds
 
     public String generate(Authentication authentication) {
         final User user = (User) authentication.getPrincipal();
@@ -32,8 +32,18 @@ public class JwtTokenProvider {
                 .setSubject(userId)
                 .setClaims(claims)
                 .setIssuedAt(Calendar.getInstance().getTime())
-                .setExpiration(new Date(Calendar.getInstance().getTimeInMillis() + TOKEN_EXPIRATION_TIME))
+                .setExpiration(new Date(Calendar.getInstance().getTimeInMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
+    }
+
+    public boolean validate(final String token) {
+        Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
+        return true;
+    }
+
+    public long getUserId(final String token) {
+        final Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+        return Long.parseLong((String) claims.get("id"));
     }
 }
