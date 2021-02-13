@@ -52,13 +52,13 @@ public class User implements UserDetails {
     @Column(name = "created_date", updatable = false)
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "yyyy-MM-DD", timezone = "Europe/Berlin")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Europe/Berlin")
     private Date createdDate;
 
     @Column(name = "updated_date")
     @UpdateTimestamp
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "yyyy-MM-DD", timezone = "Europe/Berlin")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Europe/Berlin")
     private Date updatedDate;
 
     public void addProject(Project project) {
@@ -66,6 +66,11 @@ public class User implements UserDetails {
             projects = new ArrayList<>();
         project.setUser(this);
         projects.add(project);
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedDate = new Date();
     }
 
     @Override

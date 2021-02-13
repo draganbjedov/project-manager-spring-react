@@ -55,7 +55,7 @@ public class BacklogController {
         if (error.isPresent())
             return error.get();
 
-        taskService.updateTask(task, projectIdentifier, projectSequence, principal.getName());
+        task = taskService.updateTask(task, projectIdentifier, projectSequence, principal.getName());
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 

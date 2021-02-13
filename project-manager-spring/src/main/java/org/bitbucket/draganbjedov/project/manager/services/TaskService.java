@@ -65,7 +65,7 @@ public class TaskService {
     }
 
     @Transactional
-    public void updateTask(Task task, String projectIdentifier, String projectSequence, String username) {
+    public Task updateTask(Task task, String projectIdentifier, String projectSequence, String username) {
         Task taskFromDB = getTask(projectIdentifier, projectSequence, username);
         taskFromDB.setSummary(task.getSummary());
         taskFromDB.setAcceptanceCriteria(task.getAcceptanceCriteria());
@@ -74,6 +74,8 @@ public class TaskService {
         taskFromDB.setPriority(task.getPriority());
 
         taskRepository.save(taskFromDB);
+
+        return taskFromDB;
     }
 
     @Transactional
