@@ -65,8 +65,11 @@ public class ProjectService {
     }
 
     @Transactional
-    public List<Project> getProjects() {
-        return projectRepository.findAll();
+    public List<Project> getProjects(String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isEmpty())
+            throw new UsernameNotFoundException("User with username '" + username + "' doesn't exists");
+        return projectRepository.findAllByUserId(optionalUser.get().getId());
     }
 
     @Transactional

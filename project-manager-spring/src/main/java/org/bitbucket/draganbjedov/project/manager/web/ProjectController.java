@@ -40,9 +40,9 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.getProjectByIdentifier(id), HttpStatus.OK);
     }
 
-    @GetMapping()
-    public List<Project> getProjects() {
-        return projectService.getProjects();
+    @GetMapping
+    public List<Project> getProjects(Principal principal) {
+        return projectService.getProjects(principal.getName());
     }
 
     @DeleteMapping("/{id}")
