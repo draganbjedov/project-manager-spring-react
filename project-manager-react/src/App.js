@@ -9,6 +9,10 @@ import UpdateTask from "./components/project_board/task/UpdateTask";
 import Landing from "./components/layout/Landing";
 import Register from "./components/users/Register";
 import Login from "./components/users/Login";
+import setJwtToken from "./security_utils/setJwtToken";
+import jwt_decode from "jwt-decode";
+import { SET_CURRENT_USER } from "./actions/types";
+import { logout } from "./actions/UserActions";
 
 import store from "./store";
 
@@ -17,6 +21,23 @@ import { Provider } from "react-redux";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+
+const jwtToken = localStorage.jwtToken;
+if (jwtToken) {
+  const decoded_token = jwt_decode(jwtToken);
+
+  const currentTime = Date.now() / 1000;
+  if (decoded_token.exp < currentTime) {
+    store.dispatch(logout());
+    window.location.href = "/";
+  } else {
+    setJwtToken(jwtToken);
+    store.dispatch({
+      type: SET_CURRENT_USER,
+      payload: decoded_token,
+    });
+  }
+}
 
 function App() {
   return (
