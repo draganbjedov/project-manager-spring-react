@@ -24,7 +24,7 @@ public class User implements UserDetails {
 
     @Email(message = "Username must be valid email address")
     @NotBlank(message = "Username cannot be blank")
-    @Column(unique = true)
+    @Column(unique = true, updatable = false, nullable = false)
     private String username;
 
     @NotBlank(message = "Password cannot be blank")

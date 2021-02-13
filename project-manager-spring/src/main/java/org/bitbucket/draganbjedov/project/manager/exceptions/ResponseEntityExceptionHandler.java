@@ -19,4 +19,10 @@ public class ResponseEntityExceptionHandler extends org.springframework.web.serv
         TaskNotFoundExceptionResponse exResponse = new TaskNotFoundExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(exResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler
+    public final ResponseEntity<UsernameResponse> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
+        UsernameResponse exResponse = new UsernameResponse(ex.getMessage());
+        return new ResponseEntity<>(exResponse, HttpStatus.CONFLICT);
+    }
 }
