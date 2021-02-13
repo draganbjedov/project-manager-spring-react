@@ -18,8 +18,8 @@ public class PasswordValidator implements Validator {
         if (user.getPassword().length() < 6) {
             errors.rejectValue("password", "password.length", "Password must be at least 6 characters long");
         } else if (!user.getPassword().equals(user.getConfirmPassword())) {
-            errors.rejectValue("password", "password.match", "Password doesn't match");
-            errors.rejectValue("confirmPassword", "confirmPassword.match", "Password doesn't match");
+            errors.rejectValue("password", "password.match", "Passwords doesn't match");
+            errors.rejectValue("confirmPassword", "confirmPassword.match", "Passwords doesn't match");
         }
     }
 }
