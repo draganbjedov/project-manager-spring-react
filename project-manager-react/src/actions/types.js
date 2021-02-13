@@ -7,5 +7,4 @@ export const GET_TASKS = "GET_TASKS";
 export const GET_TASK = "GET_TASK";
 export const DELETE_TASK = "DELETE_TASK";
 
-export const REGISTER_TASK = "REGISTER_TASK";
-export const LOGIN_TASK = "LOGIN_TASK";
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
