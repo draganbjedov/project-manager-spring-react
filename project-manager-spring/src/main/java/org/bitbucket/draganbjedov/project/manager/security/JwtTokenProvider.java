@@ -17,7 +17,7 @@ public class JwtTokenProvider {
 
     private static final String SECRET = "PM_SECRET_KEY_FOR_JWT";
     public static final String PREFIX = "Bearer ";
-    private static final long EXPIRATION_TIME = 30_000; // 30 seconds
+    private static final long EXPIRATION_TIME = 30 * 60 * 1000; // 30 minutes
 
     public String generate(Authentication authentication) {
         final User user = (User) authentication.getPrincipal();
