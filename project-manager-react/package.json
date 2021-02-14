@@ -1,6 +1,6 @@
 {
   "name": "project-manager-react",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
@@ -44,5 +44,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8080"
+  "proxy": "https://personal-project-manager.herokuapp.com"
 }
