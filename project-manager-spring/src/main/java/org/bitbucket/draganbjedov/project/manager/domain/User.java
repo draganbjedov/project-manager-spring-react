@@ -18,6 +18,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "projmng_user")
 public class User implements UserDetails {
 
     @Id
