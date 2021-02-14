@@ -19,6 +19,12 @@ class Register extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.security.valid_token) {
+      this.props.history.push("/dashboard");
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (this.props.errors != prevProps.errors) {
       this.setState({
@@ -64,9 +70,7 @@ class Register extends Component {
                     value={this.state.fullName}
                     onChange={this.onChange}
                   />
-                  {errors.fullName && (
-                    <div className="invalid-feedback">{errors.fullName}</div>
-                  )}
+                  {errors.fullName && <div className="invalid-feedback">{errors.fullName}</div>}
                 </div>
                 <div className="form-group">
                   <input
@@ -79,9 +83,7 @@ class Register extends Component {
                     value={this.state.username}
                     onChange={this.onChange}
                   />
-                  {errors.username && (
-                    <div className="invalid-feedback">{errors.username}</div>
-                  )}
+                  {errors.username && <div className="invalid-feedback">{errors.username}</div>}
                 </div>
                 <div className="form-group">
                   <input
@@ -94,9 +96,7 @@ class Register extends Component {
                     value={this.state.password}
                     onChange={this.onChange}
                   />
-                  {errors.password && (
-                    <div className="invalid-feedback">{errors.password}</div>
-                  )}
+                  {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                 </div>
                 <div className="form-group">
                   <input
@@ -109,9 +109,7 @@ class Register extends Component {
                     value={this.state.confirmPassword}
                     onChange={this.onChange}
                   />
-                  {errors.confirmPassword && (
-                    <div className="invalid-feedback">{errors.confirmPassword}</div>
-                  )}
+                  {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
                 </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
@@ -126,10 +124,12 @@ class Register extends Component {
 Register.propTypes = {
   register: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
+  security: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   errors: state.errors,
+  security: state.security,
 });
 
 export default connect(mapStateToProps, { register })(Register);
