@@ -28,21 +28,16 @@ class UpdateProject extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.project !== prevProps.project) {
-      const {
-        id,
-        name,
-        identifier,
-        description,
-        startDate,
-        endDate,
-      } = this.props.project;
+      const { id, name, identifier, description, startDate, endDate } = this.props.project;
+      const startDateString = startDate == null ? "" : startDate;
+      const endDateString = endDate == null ? "" : endDate;
       this.setState({
         id,
         name,
         identifier,
         description,
-        startDate,
-        endDate,
+        startDate: startDateString,
+        endDate: endDateString,
       });
     } else if (this.props.errors != prevProps.errors) {
       this.setState({
@@ -90,9 +85,7 @@ class UpdateProject extends Component {
                     value={this.state.name}
                     onChange={this.onChange}
                   />
-                  {errors.name && (
-                    <div className="invalid-feedback">{errors.name}</div>
-                  )}
+                  {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                 </div>
                 <div className="form-group">
                   <input
@@ -114,9 +107,7 @@ class UpdateProject extends Component {
                     value={this.state.description}
                     onChange={this.onChange}
                   ></textarea>
-                  {errors.description && (
-                    <div className="invalid-feedback">{errors.description}</div>
-                  )}
+                  {errors.description && <div className="invalid-feedback">{errors.description}</div>}
                 </div>
                 <h6>Start Date</h6>
                 <div className="form-group">
@@ -138,10 +129,7 @@ class UpdateProject extends Component {
                     onChange={this.onChange}
                   />
                 </div>
-                <input
-                  type="submit"
-                  className="btn btn-primary btn-block mt-4"
-                />
+                <input type="submit" className="btn btn-primary btn-block mt-4" />
               </form>
             </div>
           </div>
