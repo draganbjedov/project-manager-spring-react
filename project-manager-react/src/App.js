@@ -21,7 +21,6 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const jwtToken = localStorage.jwtToken;
 if (jwtToken) {
